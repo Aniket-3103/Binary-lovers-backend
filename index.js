@@ -4,6 +4,7 @@ const express=require("express")
 const mongoose=require("mongoose");
 const cors=require("cors");
 const userRoutes=require("./routes/user");
+const challengeRoutes=require("./routes/challenge");
 const bodyParser=require("body-parser");
 
 mongoose.connect('mongodb://127.0.0.1:27017/wiserefill')
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 
 //routes
 app.use("/user", userRoutes);
+app.use("/api/challenges", challengeRoutes);
 
 
 app.listen(3000, ()=>{

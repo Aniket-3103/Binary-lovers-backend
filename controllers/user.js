@@ -36,7 +36,7 @@ const registerUser = async (req, res) => {
 
         console.log(req.body);
 
-        if (!name || !email || !password || !isOrganization) {
+        if (!name || !email || !password) {
             return res.status(200).json({
                 statusText: "incorrect-data-sent",
             });
@@ -68,7 +68,7 @@ const registerUser = async (req, res) => {
                 user: null,
             });
         }
-        
+
         return res.status(200).json({
             statusText: "success",
             user: user,
@@ -230,19 +230,19 @@ const saveCups = async (req, res) => {
 
 //get user details
 const getUserDetails = async (req, res) => {
-    try{
-        const {userId}=req.params;
+    try {
+        const { userId } = req.params;
 
         if (!mongoose.Types.ObjectId.isValid(userId)) {
             console.log(userId);
             return res.status(400).json({ error: 'Invalid user ID format' });
         }
 
-        const user=await User.findById(userId);
+        const user = await User.findById(userId);
 
-        if(!user){
-            res.status(400).json({error: "No such user exists"});
-        } 
+        if (!user) {
+            res.status(400).json({ error: "No such user exists" });
+        }
 
         console.log(user);
 
@@ -268,10 +268,35 @@ const getUserDetails = async (req, res) => {
 
 }
 
+const getLeaderBoard = async (req, res) => {
+    // name, rank, cups saved, points, badges
+    try {
+        const users = await User.find().sort({ points: -1 });
+
+        if (!users) {
+            res.status(200).json({
+                status: "No users",
+                users: null
+            })
+        }
+
+        res.status(200).json({
+            status: "OK",
+            users: users
+        })
+
+    }
+    catch (err) {
+        res.status(500).json({
+            error: "Internal Server error: " + err
+        })
+    }
+}
 
 module.exports = {
     login,
     registerUser,
     saveCups,
-    getUserDetails
+    getUserDetails,
+    getLeaderBoard
 }

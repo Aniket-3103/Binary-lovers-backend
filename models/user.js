@@ -39,7 +39,15 @@ const userSchema = mongoose.Schema({
     points: {
         type: Number,
         default: 0
-    }
+    },
+
+    competitions: [
+        {
+          competitionId: { type: mongoose.Schema.Types.ObjectId, ref: "Challenge" },
+          status: { type: String, enum: ["joined", "completed"], default: "joined" },
+          completedAt: { type: Date, default: null }
+        },
+      ],
 });
 
 const userModel = new mongoose.model("User", userSchema);

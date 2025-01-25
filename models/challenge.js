@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Schema=mongoose.Schema;
 
 const challengeSchema = mongoose.Schema({
     title: {
@@ -23,18 +24,19 @@ const challengeSchema = mongoose.Schema({
     },
 
     startDate: {
-        type: DateTime,
-        default: new Date.now(),
+        type: Date,
+        default: new Date(),
     },
 
     endDate: {
-        type: DateTime,
-        default: new Date.now(),
+        type: Date,
+        default: new Date(),
     },
 
     status: {
         type: String,
-        default: "active"
+        default: "active",
+        enum: ["active", "completed"]
     },
 
     rewardPoints: {
@@ -44,9 +46,10 @@ const challengeSchema = mongoose.Schema({
 
     participants: [
         {
-            type: Schema.Types.ObjectId,
-            ref: "User"
-        }
+          user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+          status: { type: String, enum: ["joined", "completed"], default: "joined" }, // Participation status
+          completedAt: { type: Date, default: null }, // Timestamp for completion
+        },
     ]
 });
 
